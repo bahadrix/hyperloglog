@@ -16,3 +16,4 @@ jobs:
           command: go test -bench .
       - store_test_results:
           path: test-results
+
