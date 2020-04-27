@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/axiomhq/hyperloglog"
+	"github.com/bahadrix/hyperloglog"
 	"github.com/influxdata/influxdb/pkg/estimator/hll"
 )
 
