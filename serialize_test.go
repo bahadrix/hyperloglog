@@ -26,9 +26,33 @@ func TestSketch_Serialization(t *testing.T) {
 		},
 	}
 
-	for _, sk := range []*Sketch{New(), New16()} {
+	subjects := []struct {
+		name   string
+		sketch *Sketch
+	}{
+		{
+			name:   "sparse_14",
+			sketch: New(),
+		},
+		{
+			name:   "sparse_16",
+			sketch: New16(),
+		},
+		{
+			name:   "no_sparse_14",
+			sketch: NewNoSparse(),
+		},
+		{
+			name:   "no_sparse_16",
+			sketch: New16NoSparse(),
+		},
+	}
+
+	for _, subject := range subjects {
+		sk := subject.sketch
 		for i, op := range manipulations {
-			t.Run(fmt.Sprintf("Serialization_%d_for_%d", i, sk.p), func(t *testing.T) {
+
+			t.Run(fmt.Sprintf("Serialization_%d_for_%s", i, subject.name), func(t *testing.T) {
 				op(sk)
 
 				data, err := sk.Serialize()
@@ -44,7 +68,7 @@ func TestSketch_Serialization(t *testing.T) {
 				}
 
 				if sk.Estimate() != loadedHll.Estimate() {
-					t.Errorf("Estimations not equal")
+					t.Errorf("Estimations not equal; expected %d got %d", sk.Estimate(), loadedHll.Estimate())
 				}
 			})
 		}
